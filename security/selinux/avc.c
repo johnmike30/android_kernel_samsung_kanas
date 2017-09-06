@@ -965,20 +965,6 @@ int avc_ss_reset(u32 seqno)
  * results in a bigger stack frame.
  */
 static noinline struct avc_node *avc_compute_av(u32 ssid, u32 tsid,
-<<<<<<< HEAD
-			 u16 tclass, struct av_decision *avd)
-{
-	rcu_read_unlock();
-	security_compute_av(ssid, tsid, tclass, avd);
-	rcu_read_lock();
-	return avc_insert(ssid, tsid, tclass, avd);
-}
-
-static noinline int avc_denied(u32 ssid, u32 tsid,
-			 u16 tclass, u32 requested,
-			 unsigned flags,
-			 struct av_decision *avd)
-=======
 			 u16 tclass, struct av_decision *avd,
 			 struct avc_xperms_node *xp_node)
 {
@@ -993,7 +979,6 @@ static noinline int avc_denied(u32 ssid, u32 tsid,
 				u16 tclass, u32 requested,
 				u8 driver, u8 xperm, unsigned flags,
 				struct av_decision *avd)
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 {
 	if (flags & AVC_STRICT)
 		return -EACCES;
@@ -1001,13 +986,6 @@ static noinline int avc_denied(u32 ssid, u32 tsid,
 	if (selinux_enforcing && !(avd->flags & AVD_FLAGS_PERMISSIVE))
 		return -EACCES;
 
-<<<<<<< HEAD
-	avc_update_node(AVC_CALLBACK_GRANT, requested, ssid,
-				tsid, tclass, avd->seqno);
-	return 0;
-}
-
-=======
 	avc_update_node(AVC_CALLBACK_GRANT, requested, driver, xperm, ssid,
 				tsid, tclass, avd->seqno, NULL, flags);
 	return 0;
@@ -1093,7 +1071,6 @@ decision:
 		return rc2;
 	return rc;
 }
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 
 /**
  * avc_has_perm_noaudit - Check permissions but perform no auditing.
@@ -1121,10 +1098,7 @@ inline int avc_has_perm_noaudit(u32 ssid, u32 tsid,
 			 struct av_decision *avd)
 {
 	struct avc_node *node;
-<<<<<<< HEAD
-=======
 	struct avc_xperms_node xp_node;
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 	int rc = 0;
 	u32 denied;
 
@@ -1133,26 +1107,16 @@ inline int avc_has_perm_noaudit(u32 ssid, u32 tsid,
 	rcu_read_lock();
 
 	node = avc_lookup(ssid, tsid, tclass);
-<<<<<<< HEAD
-	if (unlikely(!node)) {
-		node = avc_compute_av(ssid, tsid, tclass, avd);
-	} else {
-=======
 	if (unlikely(!node))
 		node = avc_compute_av(ssid, tsid, tclass, avd, &xp_node);
 	else
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 		memcpy(avd, &node->ae.avd, sizeof(*avd));
 		avd = &node->ae.avd;
 	}
 
 	denied = requested & ~(avd->allowed);
 	if (unlikely(denied))
-<<<<<<< HEAD
-		rc = avc_denied(ssid, tsid, tclass, requested, flags, avd);
-=======
 		rc = avc_denied(ssid, tsid, tclass, requested, 0, 0, flags, avd);
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 
 	rcu_read_unlock();
 	return rc;
