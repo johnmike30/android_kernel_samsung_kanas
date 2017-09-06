@@ -92,16 +92,10 @@ static int context_struct_to_string(struct context *context, char **scontext,
 				    u32 *scontext_len);
 
 static void context_struct_compute_av(struct context *scontext,
-<<<<<<< HEAD
-				      struct context *tcontext,
-				      u16 tclass,
-				      struct av_decision *avd);
-=======
 					struct context *tcontext,
 					u16 tclass,
 					struct av_decision *avd,
 					struct extended_perms *xperms);
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 
 struct selinux_mapping {
 	u16 value; /* policy value */
@@ -618,16 +612,6 @@ static void type_attribute_bounds_av(struct context *scontext,
 	}
 }
 
-<<<<<<< HEAD
-/*
- * Compute access vectors based on a context structure pair for
- * the permissions in a particular class.
- */
-static void context_struct_compute_av(struct context *scontext,
-				      struct context *tcontext,
-				      u16 tclass,
-				      struct av_decision *avd)
-=======
 /*
  * flag which drivers have permissions
  * only looking for ioctl based extended permssions
@@ -662,7 +646,6 @@ static void context_struct_compute_av(struct context *scontext,
 					u16 tclass,
 					struct av_decision *avd,
 					struct extended_perms *xperms)
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 {
 	struct constraint_node *constraint;
 	struct role_allow *ra;
@@ -676,13 +659,10 @@ static void context_struct_compute_av(struct context *scontext,
 	avd->allowed = 0;
 	avd->auditallow = 0;
 	avd->auditdeny = 0xffffffff;
-<<<<<<< HEAD
-=======
 	if (xperms) {
 		memset(&xperms->drivers, 0, sizeof(xperms->drivers));
 		xperms->len = 0;
 	}
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 
 	if (unlikely(!tclass || tclass > policydb.p_classes.nprim)) {
 		if (printk_ratelimit())
@@ -697,11 +677,7 @@ static void context_struct_compute_av(struct context *scontext,
 	 * this permission check, then use it.
 	 */
 	avkey.target_class = tclass;
-<<<<<<< HEAD
-	avkey.specified = AVTAB_AV;
-=======
 	avkey.specified = AVTAB_AV | AVTAB_XPERMS;
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 	sattr = flex_array_get(policydb.type_attr_map_array, scontext->type - 1);
 	BUG_ON(!sattr);
 	tattr = flex_array_get(policydb.type_attr_map_array, tcontext->type - 1);
@@ -718,13 +694,6 @@ static void context_struct_compute_av(struct context *scontext,
 				else if (node->key.specified == AVTAB_AUDITALLOW)
 					avd->auditallow |= node->datum.data;
 				else if (node->key.specified == AVTAB_AUDITDENY)
-<<<<<<< HEAD
-					avd->auditdeny &= node->datum.data;
-			}
-
-			/* Check conditional av table for additional permissions */
-			cond_compute_av(&policydb.te_cond_avtab, &avkey, avd);
-=======
 					avd->auditdeny &= node->datum.u.data;
 				else if (xperms && (node->key.specified & AVTAB_XPERMS))
 					services_compute_xperms_drivers(xperms, node);
@@ -733,7 +702,6 @@ static void context_struct_compute_av(struct context *scontext,
 			/* Check conditional av table for additional permissions */
 			cond_compute_av(&policydb.te_cond_avtab, &avkey,
 					avd, xperms);
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 
 		}
 	}
@@ -964,9 +932,6 @@ static void avd_init(struct av_decision *avd)
 	avd->flags = 0;
 }
 
-<<<<<<< HEAD
-
-=======
 void services_compute_xperms_decision(struct extended_perms_decision *xpermd,
 					struct avtab_node *node)
 {
@@ -1101,17 +1066,13 @@ allow:
 	goto out;
 }
 
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 /**
  * security_compute_av - Compute access vector decisions.
  * @ssid: source security identifier
  * @tsid: target security identifier
  * @tclass: target security class
  * @avd: access vector decisions
-<<<<<<< HEAD
-=======
  * @xperms: extended permissions
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
  *
  * Compute a set of access vector decisions based on the
  * SID pair (@ssid, @tsid) for the permissions in @tclass.
@@ -1119,22 +1080,15 @@ allow:
 void security_compute_av(u32 ssid,
 			 u32 tsid,
 			 u16 orig_tclass,
-<<<<<<< HEAD
-			 struct av_decision *avd)
-=======
 			 struct av_decision *avd,
 			 struct extended_perms *xperms)
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 {
 	u16 tclass;
 	struct context *scontext = NULL, *tcontext = NULL;
 
 	read_lock(&policy_rwlock);
 	avd_init(avd);
-<<<<<<< HEAD
-=======
 	xperms->len = 0;
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 	if (!ss_initialized)
 		goto allow;
 
@@ -1162,11 +1116,7 @@ void security_compute_av(u32 ssid,
 			goto allow;
 		goto out;
 	}
-<<<<<<< HEAD
-	context_struct_compute_av(scontext, tcontext, tclass, avd);
-=======
 	context_struct_compute_av(scontext, tcontext, tclass, avd, xperms);
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 	map_decision(orig_tclass, avd, policydb.allow_unknown);
 out:
 	read_unlock(&policy_rwlock);
