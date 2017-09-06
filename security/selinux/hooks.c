@@ -402,16 +402,11 @@ static int sb_finish_set_opts(struct super_block *sb)
 	    sbsec->behavior > ARRAY_SIZE(labeling_behaviors))
 		sbsec->flags &= ~SE_SBLABELSUPP;
 
-<<<<<<< HEAD
-	/* Special handling for sysfs. Is genfs but also has setxattr handler*/
-	if (strncmp(sb->s_type->name, "sysfs", sizeof("sysfs")) == 0)
-=======
 	/* Special handling. Is genfs but also has in-core setxattr handler*/
 	if (!strcmp(sb->s_type->name, "sysfs") ||
 	    !strcmp(sb->s_type->name, "pstore") ||
 	    !strcmp(sb->s_type->name, "debugfs") ||
 	    !strcmp(sb->s_type->name, "rootfs"))
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 		sbsec->flags |= SE_SBLABELSUPP;
 
 	/* Initialize the root inode. */
@@ -3068,8 +3063,6 @@ static void selinux_file_free_security(struct file *file)
 	file_free_security(file);
 }
 
-<<<<<<< HEAD
-=======
 /*
  * Check whether a task has the ioctl permission and cmd
  * operation to an inode.
@@ -3110,7 +3103,6 @@ out:
 	return rc;
 }
 
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 static int selinux_file_ioctl(struct file *file, unsigned int cmd,
 			      unsigned long arg)
 {
