@@ -617,12 +617,6 @@ int cond_write_list(struct policydb *p, struct cond_node *list, void *fp)
 
 	return 0;
 }
-<<<<<<< HEAD
-/* Determine whether additional permissions are granted by the conditional
- * av table, and if so, add them to the result
- */
-void cond_compute_av(struct avtab *ctab, struct avtab_key *key, struct av_decision *avd)
-=======
 
 void cond_compute_xperms(struct avtab *ctab, struct avtab_key *key,
 		struct extended_perms_decision *xpermd)
@@ -645,7 +639,6 @@ void cond_compute_xperms(struct avtab *ctab, struct avtab_key *key,
  */
 void cond_compute_av(struct avtab *ctab, struct avtab_key *key,
 		struct av_decision *avd, struct extended_perms *xperms)
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 {
 	struct avtab_node *node;
 
@@ -667,14 +660,10 @@ void cond_compute_av(struct avtab *ctab, struct avtab_key *key,
 			avd->auditdeny &= node->datum.data;
 		if ((u16)(AVTAB_AUDITALLOW|AVTAB_ENABLED) ==
 		    (node->key.specified & (AVTAB_AUDITALLOW|AVTAB_ENABLED)))
-<<<<<<< HEAD
-			avd->auditallow |= node->datum.data;
-=======
 			avd->auditallow |= node->datum.u.data;
 		if (xperms && (node->key.specified & AVTAB_ENABLED) &&
 				(node->key.specified & AVTAB_XPERMS))
 			services_compute_xperms_drivers(xperms, node);
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 	}
 	return;
 }
