@@ -143,8 +143,6 @@ static struct policydb_compat_info policydb_compat[] = {
 		.sym_num	= SYM_NUM,
 		.ocon_num	= OCON_NUM,
 	},
-<<<<<<< HEAD
-=======
 	{
 		.version	= POLICYDB_VERSION_CONSTRAINT_NAMES,
 		.sym_num	= SYM_NUM,
@@ -155,7 +153,6 @@ static struct policydb_compat_info policydb_compat[] = {
 		.sym_num	= SYM_NUM,
 		.ocon_num	= OCON_NUM,
 	},
->>>>>>> d4dd68c... selinux: Port SELinux from android-3.10.y branch for Android N
 };
 
 static struct policydb_compat_info *policydb_lookup_compat(int version)
